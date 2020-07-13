@@ -1,0 +1,52 @@
+[
+    {
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "band": "small", 
+                "birth": 0.130541, 
+                "contribution": 33, 
+                "death": 0.15867, 
+                "hypervolume": 44, 
+                "match": "2-877155", 
+                "name": "1-876959", 
+                "parent": "1-869211", 
+                "persistence": 0.03, 
+                "volume": 316
+            }, 
+            {
+                "band": "small", 
+                "birth": 0.133365, 
+                "contribution": 32, 
+                "death": 0.164399, 
+                "hypervolume": 54, 
+                "match": "2-874966", 
+                "name": "1-874966", 
+                "parent": "1-869211", 
+                "persistence": 0.03, 
+                "volume": 374
+            }, 
+            {
+                "band": "small", 
+                "birth": 0.131948, 
+                "contribution": 31, 
+                "death": 0.163726, 
+                "hypervolume": 51, 
+                "match": "2-867670", 
+                "name": "1-867670", 
+                "parent": "1-869211", 
+                "persistence": 0.03, 
+                "volume": 358
+            }
+        ], 
+        "contribution": 3, 
+        "death": 0.178586, 
+        "hypervolume": 62, 
+        "match": "2-869512", 
+        "name": "1-869211", 
+        "parent": "null", 
+        "persistence": 0.18, 
+        "volume": 417
+    }
+]

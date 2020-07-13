@@ -1,0 +1,168 @@
+[
+    {
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "band": "small", 
+                "birth": 34.2404, 
+                "contribution": 2, 
+                "death": 49.8007, 
+                "hypervolume": 104793, 
+                "match": "66-464027", 
+                "name": "67-412920", 
+                "parent": "67-866490", 
+                "persistence": 15.56, 
+                "volume": 2702
+            }, 
+            {
+                "band": "small", 
+                "birth": 31.5442, 
+                "contribution": 6, 
+                "death": 48.4339, 
+                "hypervolume": 222053, 
+                "match": "66-337023", 
+                "name": "67-6709", 
+                "parent": "67-866490", 
+                "persistence": 16.89, 
+                "volume": 6362
+            }, 
+            {
+                "band": "large", 
+                "birth": 34.3295, 
+                "children": [
+                    {
+                        "band": "small", 
+                        "birth": 34.4258, 
+                        "children": [
+                            {
+                                "band": "small", 
+                                "birth": 49.1834, 
+                                "contribution": 4, 
+                                "death": 66.7676, 
+                                "hypervolume": 66789, 
+                                "match": "66-873401", 
+                                "name": "67-873302", 
+                                "parent": "67-869711", 
+                                "persistence": 17.58, 
+                                "volume": 1238
+                            }, 
+                            {
+                                "band": "small", 
+                                "birth": 34.6859, 
+                                "contribution": 18, 
+                                "death": 59.3628, 
+                                "hypervolume": 418574, 
+                                "match": "66-869711", 
+                                "name": "67-336140", 
+                                "parent": "67-869711", 
+                                "persistence": 24.68, 
+                                "volume": 10022
+                            }
+                        ], 
+                        "contribution": 13, 
+                        "death": 66.9178, 
+                        "hypervolume": 39923, 
+                        "match": "66-356542", 
+                        "name": "67-869711", 
+                        "parent": "67-787395", 
+                        "persistence": 32.49, 
+                        "volume": 931
+                    }, 
+                    {
+                        "band": "medium", 
+                        "birth": 36.4712, 
+                        "contribution": 23, 
+                        "death": 81.3954, 
+                        "hypervolume": 325150, 
+                        "match": "66-836940", 
+                        "name": "67-679326", 
+                        "parent": "67-787395", 
+                        "persistence": 44.92, 
+                        "volume": 6946
+                    }, 
+                    {
+                        "band": "medium", 
+                        "birth": 36.4241, 
+                        "children": [
+                            {
+                                "band": "small", 
+                                "birth": 57.3615, 
+                                "contribution": 0, 
+                                "death": 74.1438, 
+                                "hypervolume": 26193, 
+                                "match": "66-867120", 
+                                "name": "67-856921", 
+                                "parent": "67-867344", 
+                                "persistence": 16.78, 
+                                "volume": 407
+                            }, 
+                            {
+                                "band": "small", 
+                                "birth": 44.3866, 
+                                "contribution": 2, 
+                                "death": 68.8564, 
+                                "hypervolume": 190252, 
+                                "match": "66-808976", 
+                                "name": "67-737567", 
+                                "parent": "67-867344", 
+                                "persistence": 24.47, 
+                                "volume": 3646
+                            }
+                        ], 
+                        "contribution": 2, 
+                        "death": 87.8097, 
+                        "hypervolume": 102341, 
+                        "match": "66-699425", 
+                        "name": "67-867344", 
+                        "parent": "67-787395", 
+                        "persistence": 51.39, 
+                        "volume": 1442
+                    }, 
+                    {
+                        "band": "medium", 
+                        "birth": 37.5559, 
+                        "children": [
+                            {
+                                "band": "small", 
+                                "birth": 75.5204, 
+                                "contribution": 6, 
+                                "death": 106.66, 
+                                "hypervolume": 68035, 
+                                "match": "66-876793", 
+                                "name": "67-611976", 
+                                "parent": "67-762448", 
+                                "persistence": 31.14, 
+                                "volume": 847
+                            }
+                        ], 
+                        "contribution": 6, 
+                        "death": 108.571, 
+                        "hypervolume": 354557, 
+                        "match": "66-673182", 
+                        "name": "67-762448", 
+                        "parent": "67-787395", 
+                        "persistence": 71.02, 
+                        "volume": 6018
+                    }
+                ], 
+                "contribution": 11, 
+                "death": 110.857, 
+                "hypervolume": 415907, 
+                "match": "66-828199", 
+                "name": "67-787395", 
+                "parent": "67-866490", 
+                "persistence": 76.53, 
+                "volume": 6907
+            }
+        ], 
+        "contribution": 0, 
+        "death": 122.924, 
+        "hypervolume": 101107, 
+        "match": "66-864458", 
+        "name": "67-866490", 
+        "parent": "null", 
+        "persistence": 122.92, 
+        "volume": 1198
+    }
+]

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tree Example</title>
+		<style>
+
+			.node circle {
+				fill: #fff;
+				stroke: steelblue;
+				stroke-width: 3px;
+				display: none;
+			}
+
+			.node text {
+				font: 12px sans-serif;
+				display: none;
+			}
+
+			.link {
+				fill: none;
+				stroke: #ccc;
+				stroke-width: 2px;
+				display: none;
+			}
+
+			.linker {
+				stroke: steelblue;
+				stroke-opacity: .4;
+				fill: none;
+				display:none;
+			}
+
+			.toplinker {
+				stroke: orange;
+				stroke-opacity: .4;
+				fill: none;
+				display:none;
+			}
+
+			.bottomlinker {
+				stroke: red;
+				stroke-opacity: .4;
+				fill: none;
+				display:none;
+			}
+
+			.centerlinker {
+				stroke: green;
+				stroke-opacity: .4;
+				fill: none;
+				display:none;
+			}
+
+			.area {
+				fill: lightgreen;
+				stroke: black;
+				stroke-width: 1;
+				opacity: .4;
+			}
+
+		</style>
+	</head>
+
+<body>
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="colors.js"></script>
+
+<script>
+
+// ************** Generate the tree diagram	 *****************
+
+var treeCount = 120;
+var containerHeight = 500;
+var containerWidth = 25000;
+var individualWidth = null;
+
+var margin = {top: 0, right: 0, bottom: 20, left: 120},
+	width = containerWidth - margin.right - margin.left,
+	height = containerHeight - margin.top - margin.bottom;
+
+var identifierIndex = 0;
+
+var maximumAveragePersistence = 0;
+var maximumAverageHypervolume = 0;
+var maximumAverageVolume = 0;
+var maximumAverageContribution = 0;
+var maximumTrackIndex = 0;
+var maximumTrackLength = 0;
+
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+	.attr("id", "svgcontainer")
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var line = d3.svg.line()
+	.x(function(d) { return d.x; })
+	.y(function(d) { return d.y; })
+	.tension(.5)
+	.interpolate("bundle");
+
+var linearline = d3.svg.line()
+	.x(function(d) { return d.x; })
+	.y(function(d) { return d.y; })
+	.interpolate("linear");
+
+
+drawTimestepLines();
+
+var lowest_timestep = 1;
+
+for(var timestep = lowest_timestep; timestep < 120; timestep++){
+	console.log(timestep);
+	var leftFile = "left-tv_" + (timestep + 1) + ".json";
+	var rightFile = "right-tv_" + (timestep) + ".json";
+	drawTimesteps(leftFile, rightFile, timestep-lowest_timestep);
+}
+
+
+// Adhitya: It is unfucking believable that I wrote such code.
+// This is Javascript so welcome to callback hell
+function drawTimesteps(leftFile, rightFile, timestep){
+	// load the external data
+	d3.json(rightFile, function(error, treeData) {
+		addGroundNodes(treeData[0], function(root1) {
+			// load the second json within the first one
+			d3.json(leftFile, function(error, treeData) {
+				addGroundNodes(treeData[0], function(root2) {
+					//console.log(root2);
+					//var maximumPersistence = Math.max(Math.abs(root1.death - root1.birth), Math.abs(root2.death - root2.birth));
+					var maximumPersistence = 100;
+					//console.log(maximumPersistence);
+					var scaleRatio = containerHeight/maximumPersistence;
+
+					update(root1, maximumPersistence, scaleRatio, timestep, function(root1) {
+						//console.log(root1);
+						updateother(root2, maximumPersistence, scaleRatio, timestep, function(root2) {
+							//console.log(root2);
+							addFakeNode(root1, root2, function(fakeNode) {
+								//console.log(fakeNode);
+								findMatches(fakeNode, function(matchLinks) {
+									//console.log(matchLinks);
+									drawBundle(matchLinks, timestep, function(matchLinks) {
+										//console.log(matchLinks);
+										getBundlePoints(timestep, function(bundlePoints) {
+											//console.log(bundlePoints);
+											profileFunction(bundlePoints, function(profilePoints) {
+												//console.log(profilePoints);
+												profileMultiplicant(matchLinks, profilePoints, scaleRatio, function(betaPoints) {
+													//console.log(betaPoints);
+													gammaFunction(bundlePoints, betaPoints, function(gammaLeftPoints, gammaRightPoints, gammaPoints) {
+														//console.log(gammaLeftPoints);
+														drawGammaPoints(gammaLeftPoints, gammaRightPoints, gammaPoints, function() {
+															drawGammaArea(gammaLeftPoints, gammaRightPoints, matchLinks);
+														});
+													});
+												});
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+	});
+}
+
+
+
+/*
+function(result) {
+	console.log(result);
+}
+
+		drawGammaPoints(gammaLeftPoints, gammaRightPoints, gammaPoints);
+
+		drawGammaArea(gammaLeftPoints, gammaRightPoints);
+*/
+
+
+
+function drawGammaArea(gammaLeftPoints, gammaRightPoints, matchLinks){
+
+	var colorScale = d3.scale.category20();
+	//console.log(colorScale);
+
+	for(var i = 0; i < gammaLeftPoints.length; i++){
+		var gammaLeftArc = gammaLeftPoints[i];
+		var gammaRightArc = gammaRightPoints[i];
+
+		var indexRange = d3.range(gammaLeftArc.length);
+
+		var area = d3.svg.area()
+					.interpolate("cardinal")
+					.x( function(d) { return gammaRightArc[d].x; } )
+					.y0( function(d) { return gammaLeftArc[d].y; } )
+					.y1(  function(d) { return gammaRightArc[d].y; } );
+
+		var tracklength = matchLinks[i].source.parent.tracklength;
+		var trackindex = matchLinks[i].source.parent.trackindex;
+		var average_persistence = matchLinks[i].source.parent.average_persistence;
+		var average_hypervolume = matchLinks[i].source.parent.average_hypervolume;
+		var average_volume = matchLinks[i].source.parent.average_volume;
+		var average_contribution = matchLinks[i].source.parent.average_contribution;
+
+		svg.append('path')
+			.datum(indexRange)
+			.attr('class', 'area')
+			.attr('d', area)
+			.attr('style', 'fill:'+long_colours[trackindex])
+			.attr('data-tracklength', tracklength)
+			.attr('data-trackindex', trackindex)
+			.attr('data-persistence', average_persistence)
+			.attr('data-hypervolume', average_hypervolume)
+			.attr('data-volume', average_volume)
+			.attr('data-contribution', average_contribution);
+
+
+		maximumAveragePersistence = Math.max(maximumAveragePersistence, average_persistence);
+		maximumTrackIndex = Math.max(maximumTrackIndex, trackindex);
+		maximumTrackLength = Math.max(maximumTrackLength, tracklength);
+		changeThresholdInputs();
+
+		//console.log(i);
+		//console.log(gammaLeftArc);
+		//console.log(gammaRightArc);
+	}
+
+}
+
+function drawGammaPoints(gammaLeftPoints, gammaRightPoints, gammaPoints, callback){
+
+	svg.selectAll(".topjunk")
+		.data(gammaRightPoints)
+		.enter()
+		.append("path")
+		.attr("class", "toplinker")
+		.attr("d", linearline)
+		.attr("data-right", "right");
+
+	svg.selectAll(".bottomjunk")
+		.data(gammaLeftPoints)
+		.enter()
+		.append("path")
+		.attr("class", "bottomlinker")
+		.attr("d", linearline)
+		.attr("data-left", "left");
+
+	svg.selectAll(".centerjunk")
+		.data(gammaPoints)
+		.enter()
+		.append("path")
+		.attr("class", "centerlinker")
+		.attr("d", line)
+		.attr("data-center", "center");
+
+	callback();
+}
+
+function gammaFunction(bundlePoints, betaPoints, callback){
+	var gammaPoints = [];
+	var gammaLeftPoints = [];
+	var gammaRightPoints = [];
+
+	for (var i = 0; i < bundlePoints.length; i++){
+		var bundleArc = bundlePoints[i];
+		//console.log(bundleArc);
+
+		var gammaArc = [];
+		var gammaLeftArc = [];
+		var gammaRightArc = [];
+
+		for (var j = 0; j < bundleArc.length; j++){
+			var x = bundleArc[j].x;
+			var y = bundleArc[j].y;
+
+			var beta = betaPoints[i][j];
+
+			var gammaX = x;
+
+			var gammaY = y;
+			var gammaLeftY = y + beta;
+			var gammaRightY = y - beta;
+
+			var gamma = {"x": gammaX, "y": gammaY};
+			var gammaLeft = {"x": gammaX, "y": gammaLeftY};
+			var gammaRight = {"x": gammaX, "y": gammaRightY};
+
+			gammaArc.push(gamma);
+			gammaLeftArc.push(gammaLeft);
+			gammaRightArc.push(gammaRight);
+
+			//console.log(gammaLeft);
+			//console.log(gammaRight);
+			//console.log(gammaX + " " + gammaLeftY + " " + y + " " + gammaRightY);
+		}
+
+		gammaPoints.push(gammaArc);
+		gammaLeftPoints.push(gammaLeftArc);
+		gammaRightPoints.push(gammaRightArc);
+	}
+
+	//console.log(bundlePoints);
+	//console.log(gammaLeftPoints);
+	//console.log(gammaRightPoints);
+
+	callback(gammaLeftPoints, gammaRightPoints, gammaPoints);
+}
+
+// this function should return list of lists
+// each list should contain t number of elements corresponding
+// to the respective persistence of the arcs
+function profileMultiplicant(matchLinks, profilePoints, scaleRatio, callback){
+
+	var betaPoints = [];
+
+	for (var i = 0; i < matchLinks.length; i++){
+		var matchLink = matchLinks[i];
+
+		// use persistence of source and target nodes
+		var sourcePersistence = Math.abs(matchLink.source.death - matchLink.source.birth) * 1;
+		var targetPersistence = Math.abs(matchLink.target.death - matchLink.target.birth) * 1;
+
+		var matchBetaPoints = [];
+
+		for (var j = 0; j < profilePoints.length; j++){
+			var profilePoint = profilePoints[j];
+
+			var t = profilePoint[0];
+			var profileValue = profilePoint[1];
+			var sigma = ((1 - t) * (sourcePersistence/2)) + (t * (targetPersistence/2));
+			var beta = sigma * profileValue;
+
+			matchBetaPoints.push(beta);
+			//console.log(j + " " + t + "  " + profileValue + " " + sigma + " " + beta);
+		}
+
+		betaPoints.push(matchBetaPoints);
+
+		//console.log(i + " " + sourcePersistence + " " + targetPersistence);
+	}
+
+	callback(betaPoints);
+
+}
+
+
+function profileFunction(bundlePoints, callback){
+	// iterate through list of bundle points
+	// find length and arc-length parameterization
+
+	// though we pass the set of points they are unnecessary
+	// the length is sufficient in this case since all arcs
+	// have the same number of sample points
+	var lambda = 0.7;
+	var profilePoints = [];
+
+	// take the first arc -- just its length is sufficient
+	var arc = bundlePoints[0];
+	var pointCount = arc.length;
+	var profilePoints = [];
+
+	for (j = 0; j < pointCount; j++){
+		var t = j/(pointCount-1);
+		var angle = 2 * Math.PI * t;
+		var cosine = (1 + Math.cos(angle)) * 2;
+		var profile = (lambda + ((1 - lambda) * cosine));
+		//console.log(t + " " + profile);
+		profilePoints.push([t, profile]);
+	}
+
+	// console.log(profilePoints);
+	callback(profilePoints);
+}
+
+
+function getBundlePoints(timestep, callback){
+	// get all elements that have a class of the bundle
+	// this is probably the simplest way
+	// since we want the coordinates after rendering them
+	var allBundleArcs = document.getElementsByClassName("linker");
+	var bundleArcs = [];
+	var bundlePoints = [];
+
+	for (var i = 0; i < allBundleArcs.length; i++){
+		var bundleArc = allBundleArcs[i];
+		var bundleTimestep = bundleArc.getAttribute("data-timestep");
+
+		if(parseInt(bundleTimestep) === parseInt(timestep)){
+			bundleArcs.push(bundleArc);
+		}
+	}
+
+	//console.log(bundleArcs);
+
+	// iterate across the set of bundleArcs
+	for (var i = 0; i < bundleArcs.length; i++){
+		var bundleArc = bundleArcs[i];
+		var bundleArcLength = bundleArc.getTotalLength();
+		var bundleArcPoints = [];
+
+		//console.log(i +  " " + bundleArcLength);
+
+		// it is assured that only a single point will be present get a given length
+		var intersections = 50;
+		for (var j = 0; j <= intersections; j++){
+			var distance = j * 1/intersections * bundleArcLength;
+			var point = bundleArc.getPointAtLength(distance);
+			bundleArcPoints.push(point);
+		}
+
+		// push the list of arc points to the entire set
+		bundlePoints.push(bundleArcPoints);
+	}
+
+	//console.log(bundlePoints);
+
+	callback(bundlePoints);
+
+}
+
+function drawBundle(matchLinks, timestep, callback){
+
+	var bundle = d3.layout.bundle();
+
+	var a = svg.selectAll(".junk")
+		.data(bundle(matchLinks))
+		.enter()
+		.append("path")
+		.attr("class", "linker")
+		.attr("data-timestep", timestep)
+		.attr("d", d3.svg.line()
+					.x(function(d) { return d.y; })
+					.y(function(d) { return d.x; })
+					.tension(.5)
+					.interpolate("bundle")
+		);
+		//.attr("id", function(d){ console.log(d); return "bundle-" + d[0].id;});
+
+		//console.log(a);
+		callback(matchLinks);
+}
+
+// translate nodes according to index
+function translateNodes(root, index, callback){
+	var queue = [];
+	queue.push(root);
+
+	while (queue.length > 0) {
+		var node = queue[0];
+
+		node.y = node.y + (individualWidth * index);
+
+		if ("children" in node) {
+			for (child in node.children) {
+				queue.push(node.children[child]);
+			}
+		}
+		queue.shift();
+	}
+	callback(root);
+}
+
+
+// increment depth and find matches
+function findMatches(root, callback){
+	var matches = {};
+	var matchLinks = [];
+
+	var queue = [];
+	queue.push(root);
+
+	while (queue.length > 0) {
+		var node = queue[0];
+
+		// store matches
+		if("match" in node){
+			matches[node.match] = node;
+		}
+
+		if ("children" in node) {
+			for (child in node.children) {
+				queue.push(node.children[child]);
+			}
+		}
+		queue.shift();
+	}
+
+	// assign matches
+	queue.push(root);
+
+	while (queue.length > 0) {
+		var node = queue[0];
+
+		// add match first to node and then to list
+		if("match" in node){
+			node.match = matches[node.name];
+
+			matchLink = {
+				"source": node,
+				"target": node.match
+			}
+			matchLinks.push(matchLink);
+
+		}
+
+		if ("children" in node) {
+			for (child in node.children) {
+				queue.push(node.children[child]);
+			}
+		}
+
+		queue.shift();
+	}
+
+	// process these links one more time so as to remove duplicates
+	// in the complete tree every node is assigned to its match
+	// however when returning from this function, we only give matches from the first tree
+	// we do this by deleting all matches from the second tree
+	var i = matchLinks.length;
+	while (i--) {
+		if(matchLinks[i].target !== undefined){
+			if (matchLinks[i].target.treeindex === 2) {
+				matchLinks.splice(i, 1);
+			}
+		}
+		else{
+			matchLinks.splice(i, 1);
+		}
+
+	}
+
+	//console.log(matchLinks);
+
+	callback(matchLinks);
+}
+
+// join both the nodes together
+function addFakeNode(root1, root2, callback){
+
+	// add both the roots as children to the fake node
+	var fakeNode = {
+		"name": "null",
+		"depth": -1,
+		"x": root1.x,
+		"y": (root1.y + root2.y)/2,
+		"id": ++identifierIndex,
+		"children": [root1, root2],
+		"treeindex": -1,
+		"birth": -1,
+		"death": -1,
+		"band": "null"
+	};
+
+	// make fake node as parent to both roots
+	root1.parent = fakeNode;
+	root2.parent = fakeNode;
+
+
+	incrementDepth(fakeNode);
+	drawFakeNode([fakeNode]);
+
+	callback(fakeNode);
+}
+
+function drawFakeNode(nodes){
+
+	// Declare the nodes
+	var node = svg.selectAll("g.node")
+				.data(nodes, function(d) { return d.id || (d.id = ++identifierIndex); });
+
+	// Enter the nodes.
+	var nodeEnter = node.enter().append("g")
+						  .attr("class", "node")
+						  .attr("transform", function(d) {
+						  return "translate(" + d.y + "," + d.x + ")"; });
+
+	nodeEnter.append("circle")
+		.attr("r", 10)
+		.style("fill", "#fff");
+
+	nodeEnter.append("text")
+		.attr("x", function(d) {
+			return d.children || d._children ? 13 : -13; })
+		.attr("dy", ".35em")
+		.attr("text-anchor", function(d) {
+			return d.children || d._children ? "start" : "end"; })
+		.text(function(d) { return d.name; })
+	.style("fill-opacity", 1);
+
+	links = tree.links(nodes);
+
+	// Declare the links…
+	var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+	// Enter the links.
+	link.enter().insert("path", "g")
+		.attr("class", "link")
+		.attr("d", diagonal);
+
+}
+
+// increment depth
+function incrementDepth(root){
+	var queue = [];
+	queue.push(root);
+
+	while (queue.length > 0) {
+		var node = queue[0];
+
+		// increment depth
+		node.depth += 1;
+
+		if ("children" in node) {
+			for (child in node.children) {
+				queue.push(node.children[child]);
+			}
+		}
+		queue.shift();
+	}
+}
+
+function addGroundNodes(root, callback) {
+	var queue = [];
+	queue.push(root);
+
+	while (queue.length > 0) {
+		var node = queue[0];
+
+		var clonedNode = cloneNode(node);
+
+		if ("children" in node) {
+			for (child in node.children) {
+				queue.push(node.children[child]);
+			}
+			// add cloned node to children
+			node.children.push(clonedNode);
+		}
+		else {
+			// create a new object for the cloned node
+			node.children = [clonedNode];
+		}
+		queue.shift();
+	}
+
+	callback(root);
+}
+
+function cloneNode(node){
+	var clonedNode = {
+		"name": "ground-" + node.name,
+		"parent": node.parent,
+		"match": "ground-" + node.match,
+		"cloned": true,
+		"birth": node.birth,
+		"death": node.death,
+		"band": node.band
+	}
+
+	delete node.match;
+	return clonedNode;
+
+}
+
+function update(source, maximumPersistence, scaleRatio, timestep, callback) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
+
+  var maximumDepth = -1;
+
+  // Normalize for fixed-depth.
+  // store maximum depth as well
+  nodes.forEach(function(d) {
+	  maximumDepth = Math.max(maximumDepth, d.depth);
+	  //console.log(d.y + " " + d.name);
+  });
+
+  // shift the grounded nodes to match with their parent
+  nodes.forEach(function(d) {
+	  if(d.cloned){
+		var scaledBirth = d.birth * scaleRatio;
+		var scaledDeath = d.death * scaleRatio;
+		var scaledCenter = parseInt((scaledBirth + scaledDeath)/2);
+		d.x = scaledCenter;
+		d.parent.x = d.x;
+		d.apparentDepth = maximumDepth + (maximumDepth - d.parent.depth - 1);
+		d.y = 0 + (individualWidth * timestep);
+
+/*
+		// shift ground nodes according to band
+		// if large do nothing
+		if(d.band === "large"){
+			d.y = 0;
+		}
+		else if(d.band === "medium"){
+			d.y = (0.1 * individualWidth);
+		}
+		else if(d.band === "small"){
+			d.y = (0.2 * individualWidth);
+		}
+*/
+
+	  }
+	  else{
+		d.apparentDepth = d.depth;
+		d.y = (individualWidth/2) + (individualWidth * timestep);
+	  }
+
+	  // just having someway to know that a node is part of which tree
+	  d.treeindex = 1;
+  });
+
+  // Declare the nodes…
+  var node = svg.selectAll("g.node")
+  				.data(nodes, function(d) { return d.id || (d.id = ++identifierIndex); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+						.attr("class", "node")
+						.attr("transform", function(d) {
+						return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeEnter.append("circle")
+	  .attr("r", 10)
+	  .style("fill", "#fff");
+
+  nodeEnter.append("text")
+	.attr("x", function(d) {
+		return d.children || d._children ? 13 : -13; })
+	.attr("dy", ".35em")
+	.attr("text-anchor", function(d) {
+		return d.children || d._children ? "start" : "end"; })
+	.text(function(d) { return d.name; })
+	.style("fill-opacity", 1);
+
+	nodeEnter.append("text")
+	.attr("x", function(d) {
+		return d.children || d._children ? 13 : -13; })
+	.attr("dy", "1.35em")
+	.attr("text-anchor", function(d) {
+		return d.children || d._children ? "start" : "end"; })
+	.text(function(d) { return "[" + d.birth + ", "+ d.death +"]"; })
+	.style("fill-opacity", 1);
+
+  // Declare the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", diagonal);
+
+	callback(source);
+
+}
+
+
+function updateother(source, maximumPersistence, scaleRatio, timestep, callback) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
+
+  var maximumDepth = -1;
+
+  // Normalize for fixed-depth.
+  // store maximumDepth for later
+  nodes.forEach(function(d) {
+	  maximumDepth = Math.max(maximumDepth, d.depth);
+  });
+
+  // shift the grounded nodes to match with their parent
+  // NOTE: In practice, it will be the other way around, the parent node positions will be shifted based the ground nodes
+  nodes.forEach(function(d) {
+	  if(d.cloned){
+		var scaledBirth = d.birth * scaleRatio;
+		var scaledDeath = d.death * scaleRatio;
+		var scaledCenter = parseInt((scaledBirth + scaledDeath)/2);
+		d.x = scaledCenter;
+		d.parent.x = d.x;
+		d.apparentDepth = maximumDepth + (maximumDepth - d.parent.depth - 1);
+		d.y = individualWidth + (individualWidth * timestep);
+
+/*
+		// shift ground nodes according to band
+		// if large do nothing
+		if(d.band === "large"){
+			d.y = individualWidth;
+		}
+		else if(d.band === "medium"){
+			d.y = (0.9 * individualWidth);
+		}
+		else if(d.band === "small"){
+			d.y = (0.8 * individualWidth);
+		}
+*/
+
+	  }
+	  else{
+		  d.apparentDepth = d.depth;
+		  d.y = (individualWidth/2) + (individualWidth * timestep);
+	  }
+	  // just having someway to know that a node is part of which tree
+	  d.treeindex = 2;
+  });
+
+  // Declare the nodes…
+  var node = svg.selectAll("g.node")
+  				.data(nodes, function(d) { return d.id || (d.id = ++identifierIndex); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+						.attr("class", "node")
+						.attr("transform", function(d) {
+						return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeEnter.append("circle")
+	  .attr("r", 10)
+	  .style("fill", "#fff");
+
+  nodeEnter.append("text")
+	.attr("x", function(d) {
+		return d.children || d._children ? 13 : -13; })
+	.attr("dy", ".35em")
+	.attr("text-anchor", function(d) {
+		return d.children || d._children ? "start" : "end"; })
+	.text(function(d) { return d.name; })
+	.style("fill-opacity", 1);
+
+	nodeEnter.append("text")
+  	.attr("x", function(d) {
+  		return d.children || d._children ? 13 : -13; })
+  	.attr("dy", "1.35em")
+  	.attr("text-anchor", function(d) {
+  		return d.children || d._children ? "start" : "end"; })
+  	.text(function(d) { return "[" + d.birth + ", "+ d.death +"]"; })
+  	.style("fill-opacity", 1);
+
+  // Declare the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", diagonal);
+
+	callback(source);
+}
+
+function drawTimestepLines(){
+	individualWidth = parseInt(containerWidth/(treeCount+1));
+
+	for(var i = 0; i <= treeCount; i++){
+		var position = individualWidth * i;
+		var secondPosition = (individualWidth * i) + (0.1 * individualWidth);
+		var thirdPosition = (individualWidth * i) + (0.2 * individualWidth);
+		var fourthPosition = (individualWidth * i) + (0.8 * individualWidth);
+		var fifthPosition = (individualWidth * i) + (0.9 * individualWidth);
+
+
+		drawLineAtPosition(position, "black", i);
+		drawLineAtPosition(fourthPosition, "pink");
+		drawLineAtPosition(fifthPosition, "hotpink");
+
+		// prevent overflow after last one
+		if (i !== treeCount-1){
+			drawLineAtPosition(secondPosition, "hotpink");
+			drawLineAtPosition(thirdPosition, "pink");
+		}
+		//console.log(i + " " + position);
+	}
+
+}
+
+function drawLineAtPosition(position, color, index){
+	var line = svg.append("g");
+
+	line.append("line")
+		.attr("x1", position)
+		.attr("y1", 0)
+		.attr("x2", position)
+		.attr("y2", height)
+		.style("stroke-width", 2)
+		.style("stroke", color)
+		.style("fill", "none");
+
+	line.append('text')
+		.attr('class', 'barsEndlineText')
+		.attr('text-anchor', 'middle')
+		.attr("x", position)
+		.attr("y", height+18)
+		.text(index);
+}
+
+function resetTracks(){
+	var tracks = document.getElementsByClassName("area");
+
+	for (var i = 0; i < tracks.length; i++){
+		var track = tracks[i];
+		var tracklength = parseInt(track.getAttribute("data-tracklength"));
+	}
+}
+
+function thresholdTracks(){
+	var trackLengthThreshold = parseInt(document.getElementById("thresholdlength").value);
+	var trackPersistenceThreshold = parseFloat(document.getElementById("thresholdpersistence").value);
+	var trackIndexThreshold = parseInt(document.getElementById("thresholdindex").value);
+
+	var tracks = document.getElementsByClassName("area");
+
+	for (var i = 0; i < tracks.length; i++){
+		var track = tracks[i];
+		var trackLength = parseInt(track.getAttribute("data-tracklength"));
+		var trackPersistence = parseFloat(track.getAttribute("data-persistence"));
+		var trackIndex = parseInt(track.getAttribute("data-trackindex"));
+
+		if (trackIndexThreshold === 0){
+			if((trackLength > trackLengthThreshold) && (trackPersistence > trackPersistenceThreshold)){
+				track.style.visibility = "visible";
+			}
+			else{
+				track.style.visibility = "hidden";
+			}
+		}
+		else{
+			if((trackLength > trackLengthThreshold) && (trackPersistence > trackPersistenceThreshold) && (trackIndex === trackIndexThreshold)){
+				track.style.visibility = "visible";
+			}
+			else{
+				track.style.visibility = "hidden";
+			}
+		}
+	}
+}
+
+function changeThresholdInputs(){
+
+	document.getElementById("thresholdindextitle").innerHTML = "Track Index Threshold [0 to " + maximumTrackIndex + "]";
+	document.getElementById("thresholdindex").max = maximumTrackIndex;
+
+	document.getElementById("thresholdlengthtitle").innerHTML = "Track Length Threshold [0 to " + maximumTrackLength + "]";
+	document.getElementById("thresholdlength").max = maximumTrackLength;
+
+	document.getElementById("thresholdpersistencetitle").innerHTML = "Track Average Persistence [0 to " + maximumAveragePersistence + "]";
+	document.getElementById("thresholdpersistence").max = maximumAveragePersistence;
+
+}
+
+</script>
+
+<p id="thresholdindextitle">Track Index Threshold [0 to 0]</p>
+<input type="range" id="thresholdindex" name="trackindex" min="0" max="0" value="0" step="1">
+<p id="thresholdlengthtitle">Track Length Threshold [0 to 0]</p>
+<input type="range" id="thresholdlength" name="length" min="0" max="0" value="0" step="1">
+<p id="thresholdpersistencetitle">Track Average Persistence [0 to 0]</p>
+<input type="range" id="thresholdpersistence" name="persistence" min="0" max="0" value="0" step="0.25">
+
+
+<br>
+<button type="submit" value="Submit" onClick="thresholdTracks()">Submit</button>
+</body>
+</html>

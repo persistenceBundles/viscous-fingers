@@ -1,0 +1,233 @@
+[
+    {
+        "average_contribution": 11.68, 
+        "average_hypervolume": 4960.0, 
+        "average_persistence": 127.14, 
+        "average_volume": 4960.0, 
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "band": "small", 
+                "birth": 29.224, 
+                "death": 46.3584, 
+                "hypervolume": 99925, 
+                "match": "null", 
+                "name": "120-849005", 
+                "parent": "120-652882", 
+                "persistence": 17.13, 
+                "volume": 3039
+            }, 
+            {
+                "average_contribution": 25.86, 
+                "average_hypervolume": 7944.0, 
+                "average_persistence": 73.8, 
+                "average_volume": 7944.0, 
+                "band": "medium", 
+                "birth": 29.9271, 
+                "children": [
+                    {
+                        "band": "small", 
+                        "birth": 31.6561, 
+                        "death": 48.3432, 
+                        "hypervolume": 47844, 
+                        "match": "null", 
+                        "name": "120-470656", 
+                        "parent": "120-875668", 
+                        "persistence": 16.69, 
+                        "volume": 1358
+                    }, 
+                    {
+                        "average_contribution": 9.15, 
+                        "average_hypervolume": 4827.0, 
+                        "average_persistence": 28.36, 
+                        "average_volume": 4827.0, 
+                        "band": "small", 
+                        "birth": 33.3408, 
+                        "children": [
+                            {
+                                "band": "small", 
+                                "birth": 35.4844, 
+                                "death": 53.6904, 
+                                "hypervolume": 27777, 
+                                "match": "null", 
+                                "name": "120-869760", 
+                                "parent": "120-856966", 
+                                "persistence": 18.21, 
+                                "volume": 672
+                            }, 
+                            {
+                                "band": "small", 
+                                "birth": 35.3674, 
+                                "children": [
+                                    {
+                                        "average_contribution": 7.85, 
+                                        "average_hypervolume": 4736.0, 
+                                        "average_persistence": 15.89, 
+                                        "average_volume": 4736.0, 
+                                        "band": "small", 
+                                        "birth": 36.4747, 
+                                        "contribution": 3.17, 
+                                        "death": 53.3613, 
+                                        "hypervolume": 97415, 
+                                        "match": "119-673217", 
+                                        "name": "120-642616", 
+                                        "parent": "120-234558", 
+                                        "persistence": 16.89, 
+                                        "trackindex": 105, 
+                                        "tracklength": 8, 
+                                        "volume": 2412
+                                    }
+                                ], 
+                                "death": 58.1228, 
+                                "hypervolume": 231326, 
+                                "match": "null", 
+                                "name": "120-234558", 
+                                "parent": "120-856966", 
+                                "persistence": 22.76, 
+                                "volume": 5531
+                            }, 
+                            {
+                                "average_contribution": 7.99, 
+                                "average_hypervolume": 2909.0, 
+                                "average_persistence": 16.73, 
+                                "average_volume": 2909.0, 
+                                "band": "small", 
+                                "birth": 37.3715, 
+                                "children": [
+                                    {
+                                        "average_contribution": 7.64, 
+                                        "average_hypervolume": 4113.0, 
+                                        "average_persistence": 20.49, 
+                                        "average_volume": 4113.0, 
+                                        "band": "small", 
+                                        "birth": 37.6313, 
+                                        "contribution": 0.65, 
+                                        "death": 58.9273, 
+                                        "hypervolume": 76447, 
+                                        "match": "119-503244", 
+                                        "name": "120-472540", 
+                                        "parent": "120-869711", 
+                                        "persistence": 21.3, 
+                                        "trackindex": 103, 
+                                        "tracklength": 8, 
+                                        "volume": 1738
+                                    }
+                                ], 
+                                "contribution": 1.43, 
+                                "death": 60.7, 
+                                "hypervolume": 16252, 
+                                "match": "119-265161", 
+                                "name": "120-869711", 
+                                "parent": "120-856966", 
+                                "persistence": 23.33, 
+                                "trackindex": 104, 
+                                "tracklength": 8, 
+                                "volume": 372
+                            }
+                        ], 
+                        "contribution": 13.08, 
+                        "death": 72.1938, 
+                        "hypervolume": 191772, 
+                        "match": "119-867270", 
+                        "name": "120-856966", 
+                        "parent": "120-875668", 
+                        "persistence": 38.85, 
+                        "trackindex": 97, 
+                        "tracklength": 19, 
+                        "volume": 4374
+                    }, 
+                    {
+                        "average_contribution": 10.03, 
+                        "average_hypervolume": 4136.0, 
+                        "average_persistence": 45.64, 
+                        "average_volume": 4136.0, 
+                        "band": "medium", 
+                        "birth": 48.3755, 
+                        "children": [
+                            {
+                                "average_contribution": 9.22, 
+                                "average_hypervolume": 3759.0, 
+                                "average_persistence": 77.71, 
+                                "average_volume": 3759.0, 
+                                "band": "small", 
+                                "birth": 59.4948, 
+                                "contribution": 8.29, 
+                                "death": 96.1212, 
+                                "hypervolume": 49811, 
+                                "match": "119-877209", 
+                                "name": "120-877207", 
+                                "parent": "120-811346", 
+                                "persistence": 36.63, 
+                                "trackindex": 18, 
+                                "tracklength": 108, 
+                                "volume": 718
+                            }
+                        ], 
+                        "contribution": 0.79, 
+                        "death": 103.059, 
+                        "hypervolume": 389692, 
+                        "match": "119-872755", 
+                        "name": "120-811346", 
+                        "parent": "120-875668", 
+                        "persistence": 54.68, 
+                        "trackindex": 56, 
+                        "tracklength": 57, 
+                        "volume": 6015
+                    }
+                ], 
+                "contribution": 9.44, 
+                "death": 105.427, 
+                "hypervolume": 575858, 
+                "match": "119-835165", 
+                "name": "120-875668", 
+                "parent": "120-652882", 
+                "persistence": 75.5, 
+                "trackindex": 107, 
+                "tracklength": 3, 
+                "volume": 12297
+            }, 
+            {
+                "average_contribution": 10.75, 
+                "average_hypervolume": 2566.0, 
+                "average_persistence": 70.95, 
+                "average_volume": 2566.0, 
+                "band": "medium", 
+                "birth": 35.0861, 
+                "children": [
+                    {
+                        "band": "small", 
+                        "birth": 96.0179, 
+                        "death": 110.302, 
+                        "hypervolume": 12593, 
+                        "match": "null", 
+                        "name": "120-805897", 
+                        "parent": "120-814669", 
+                        "persistence": 14.28, 
+                        "volume": 125
+                    }
+                ], 
+                "contribution": 22.64, 
+                "death": 111.024, 
+                "hypervolume": 198542, 
+                "match": "119-855473", 
+                "name": "120-814669", 
+                "parent": "120-652882", 
+                "persistence": 75.94, 
+                "trackindex": 100, 
+                "tracklength": 13, 
+                "volume": 2683
+            }
+        ], 
+        "contribution": 40.51, 
+        "death": 133.93, 
+        "hypervolume": 90671, 
+        "match": "119-724288", 
+        "name": "120-652882", 
+        "parent": "null", 
+        "persistence": 133.93, 
+        "trackindex": 68, 
+        "tracklength": 46, 
+        "volume": 867
+    }
+]

@@ -1,0 +1,78 @@
+[
+    {
+        "average_contribution": 13.46, 
+        "average_hypervolume": 487.0, 
+        "average_persistence": 5.48, 
+        "average_volume": 487.0, 
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "average_contribution": 11.64, 
+                "average_hypervolume": 342.0, 
+                "average_persistence": 4.19, 
+                "average_volume": 342.0, 
+                "band": "small", 
+                "birth": 0.13894, 
+                "children": [
+                    {
+                        "average_contribution": 9.09, 
+                        "average_hypervolume": 462.0, 
+                        "average_persistence": 8.92, 
+                        "average_volume": 462.0, 
+                        "band": "small", 
+                        "birth": 0.145166, 
+                        "contribution": 23.17, 
+                        "death": 0.169594, 
+                        "hypervolume": 34, 
+                        "match": "2-873851", 
+                        "name": "3-877253", 
+                        "parent": "3-867565", 
+                        "persistence": 0.02, 
+                        "trackindex": 5, 
+                        "tracklength": 31, 
+                        "volume": 226
+                    }, 
+                    {
+                        "average_contribution": 18.84, 
+                        "average_hypervolume": 243.0, 
+                        "average_persistence": 0.04, 
+                        "average_volume": 243.0, 
+                        "band": "small", 
+                        "birth": 0.14834, 
+                        "contribution": 23.39, 
+                        "death": 0.17352, 
+                        "hypervolume": 54, 
+                        "match": "2-874966", 
+                        "name": "3-875884", 
+                        "parent": "3-867565", 
+                        "persistence": 0.03, 
+                        "trackindex": 4, 
+                        "tracklength": 8, 
+                        "volume": 348
+                    }
+                ], 
+                "contribution": 21.08, 
+                "death": 0.178656, 
+                "hypervolume": 71, 
+                "match": "2-867670", 
+                "name": "3-867565", 
+                "parent": "3-869111", 
+                "persistence": 0.04, 
+                "trackindex": 3, 
+                "tracklength": 21, 
+                "volume": 457
+            }
+        ], 
+        "contribution": 32.36, 
+        "death": 0.193687, 
+        "hypervolume": 59, 
+        "match": "2-869512", 
+        "name": "3-869111", 
+        "parent": "null", 
+        "persistence": 0.19, 
+        "trackindex": 1, 
+        "tracklength": 19, 
+        "volume": 372
+    }
+]

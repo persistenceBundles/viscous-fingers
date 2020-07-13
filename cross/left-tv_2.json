@@ -1,0 +1,67 @@
+[
+    {
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "band": "small", 
+                "birth": 0.135441, 
+                "children": [
+                    {
+                        "band": "small", 
+                        "birth": 0.136758, 
+                        "children": [
+                            {
+                                "band": "small", 
+                                "birth": 0.140122, 
+                                "death": 0.159531, 
+                                "hypervolume": 16, 
+                                "match": "null", 
+                                "name": "2-873851", 
+                                "parent": "2-877155", 
+                                "persistence": 0.02, 
+                                "volume": 113
+                            }
+                        ], 
+                        "contribution": 33, 
+                        "death": 0.161409, 
+                        "hypervolume": 22, 
+                        "match": "1-876959", 
+                        "name": "2-877155", 
+                        "parent": "2-867670", 
+                        "persistence": 0.02, 
+                        "volume": 149
+                    }, 
+                    {
+                        "band": "small", 
+                        "birth": 0.139663, 
+                        "contribution": 32, 
+                        "death": 0.166178, 
+                        "hypervolume": 57, 
+                        "match": "1-874966", 
+                        "name": "2-874966", 
+                        "parent": "2-867670", 
+                        "persistence": 0.03, 
+                        "volume": 383
+                    }
+                ], 
+                "contribution": 31, 
+                "death": 0.16903, 
+                "hypervolume": 56, 
+                "match": "1-867670", 
+                "name": "2-867670", 
+                "parent": "2-869512", 
+                "persistence": 0.03, 
+                "volume": 381
+            }
+        ], 
+        "contribution": 3, 
+        "death": 0.177961, 
+        "hypervolume": 63, 
+        "match": "1-869211", 
+        "name": "2-869512", 
+        "parent": "null", 
+        "persistence": 0.18, 
+        "volume": 410
+    }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "name": "root2",
+    "parent": "null",
+	"match": "root1",
+	"birth": 0,
+	"death": 150,
+    "children": [
+      {
+        "name": "A2",
+        "parent": "root2",
+		"match": "A1",
+		"birth": 10,
+		"death": 100,
+        "children": [
+          {
+            "name": "B2",
+            "parent": "A2",
+			"match": "C1",
+			"birth": 30,
+			"death": 60
+          },
+          {
+            "name": "C2",
+            "parent": "A2",
+			"match": "B1",
+			"birth": 70,
+			"death": 90
+          }
+        ]
+      },
+      {
+        "name": "D2",
+        "parent": "root2",
+		"match": "D1",
+		"birth": 126,
+		"death": 128
+      }
+    ]
+  }
+]

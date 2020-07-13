@@ -1,0 +1,46 @@
+[
+  {
+    "name": "root1",
+    "parent": "null",
+	"match": "root2",
+	"birth": 0,
+	"death": 255,
+	"band": "large",
+    "children": [
+      {
+        "name": "A1",
+        "parent": "root1",
+		"match": "A2",
+		"birth": 50,
+		"death": 150,
+		"band": "large",
+        "children": [
+          {
+            "name": "B1",
+            "parent": "A1",
+			"match": "B2",
+			"birth": 70,
+			"death": 90,
+			"band": "medium"
+          },
+          {
+            "name": "C1",
+            "parent": "A1",
+			"match": "C2",
+			"birth": 110,
+			"death": 140,
+			"band": "medium"
+          }
+        ]
+      },
+      {
+        "name": "D1",
+        "parent": "root1",
+		"match": "D2",
+		"birth": 200,
+		"death": 250,
+		"band": "medium"
+      }
+    ]
+  }
+]

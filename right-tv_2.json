@@ -1,0 +1,97 @@
+[
+    {
+        "average_contribution": 13.46, 
+        "average_hypervolume": 487.0, 
+        "average_persistence": 5.48, 
+        "average_volume": 487.0, 
+        "band": "large", 
+        "birth": 0.0, 
+        "children": [
+            {
+                "average_contribution": 11.64, 
+                "average_hypervolume": 342.0, 
+                "average_persistence": 4.19, 
+                "average_volume": 342.0, 
+                "band": "small", 
+                "birth": 0.135441, 
+                "children": [
+                    {
+                        "average_contribution": 33.44, 
+                        "average_hypervolume": 232.0, 
+                        "average_persistence": 0.03, 
+                        "average_volume": 232.0, 
+                        "band": "small", 
+                        "birth": 0.136758, 
+                        "children": [
+                            {
+                                "average_contribution": 9.09, 
+                                "average_hypervolume": 462.0, 
+                                "average_persistence": 8.92, 
+                                "average_volume": 462.0, 
+                                "band": "small", 
+                                "birth": 0.140122, 
+                                "contribution": 23.17, 
+                                "death": 0.159531, 
+                                "hypervolume": 16, 
+                                "match": "3-877253", 
+                                "name": "2-873851", 
+                                "parent": "2-877155", 
+                                "persistence": 0.02, 
+                                "trackindex": 5, 
+                                "tracklength": 31, 
+                                "volume": 113
+                            }
+                        ], 
+                        "death": 0.161409, 
+                        "hypervolume": 22, 
+                        "match": "null", 
+                        "name": "2-877155", 
+                        "parent": "2-867670", 
+                        "persistence": 0.02, 
+                        "trackindex": 2, 
+                        "tracklength": 2, 
+                        "volume": 149
+                    }, 
+                    {
+                        "average_contribution": 18.84, 
+                        "average_hypervolume": 243.0, 
+                        "average_persistence": 0.04, 
+                        "average_volume": 243.0, 
+                        "band": "small", 
+                        "birth": 0.139663, 
+                        "contribution": 23.39, 
+                        "death": 0.166178, 
+                        "hypervolume": 57, 
+                        "match": "3-875884", 
+                        "name": "2-874966", 
+                        "parent": "2-867670", 
+                        "persistence": 0.03, 
+                        "trackindex": 4, 
+                        "tracklength": 8, 
+                        "volume": 383
+                    }
+                ], 
+                "contribution": 21.08, 
+                "death": 0.16903, 
+                "hypervolume": 56, 
+                "match": "3-867565", 
+                "name": "2-867670", 
+                "parent": "2-869512", 
+                "persistence": 0.03, 
+                "trackindex": 3, 
+                "tracklength": 21, 
+                "volume": 381
+            }
+        ], 
+        "contribution": 32.36, 
+        "death": 0.177961, 
+        "hypervolume": 63, 
+        "match": "3-869111", 
+        "name": "2-869512", 
+        "parent": "null", 
+        "persistence": 0.18, 
+        "trackindex": 1, 
+        "tracklength": 19, 
+        "volume": 410
+    }
+]
